@@ -1,4 +1,4 @@
-# pyray_examples
+# 100+ python examples for pyray, the python bindings of raylib
 
 This repo contains example programs for [pyray](https://github.com/electronstudio/raylib-python-cffi), the Python 
 bindings for the [raylib](https://github.com/raysan5/raylib) library. All examples have been migrated from the 
@@ -7,6 +7,10 @@ official raylib C examples.
 Original C examples:
 - [raylib](https://github.com/raysan5/raylib/tree/master/examples)
 - [raylib GUI](https://github.com/raysan5/raygui/tree/master/examples)
+
+> **Note:**  
+> A ticket was opened to request integration of these examples with pyray:  
+> https://github.com/electronstudio/raylib-python-cffi/issues/173
 
 ## Running the examples
 
