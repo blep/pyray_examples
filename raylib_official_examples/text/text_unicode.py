@@ -124,7 +124,7 @@ def main():
         current_message = messages[message_index]["text"]
         language = messages[message_index]["language"]
         
-        rl.draw_text(f"Message ({language}):", 40, (position_y - 30), 20, rl.DARKGRAY)
+        rl.draw_text(f"Message ({language}):", 40, int(position_y - 30), 20, rl.DARKGRAY)
         
         # Draw the message using the appropriate font
         text_y_pos = position_y

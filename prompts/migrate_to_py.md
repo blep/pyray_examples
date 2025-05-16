@@ -193,7 +193,9 @@ Don't forget that:
 - It is rl.rl_rotatef(), not rl.rl_rotate_f()
 - It is rl.rl_translatef(), not rl.rl_translate_f()
 - It is rl.ffi.new(), not rl.pyray.ffi.new()
-- It is rl.gui_get_state() not rl.get_gui_state()
+- It is rl.gui_get_state(), not rl.get_gui_state()
+- It is rl.Texture(), not rl.Texture2D() 
+- It is rl.RenderTexture(), not rl.RenderTexture2D()
 
 # Converting file loading
 When you see code loading files such as: 

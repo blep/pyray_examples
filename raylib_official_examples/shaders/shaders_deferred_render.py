@@ -272,7 +272,7 @@ def main():
             rl.draw_text("FINAL RESULT", 10, screen_height - 30, 20, rl.DARKGREEN)
         
         elif mode == DeferredMode.POSITION:
-            texture = rl.Texture2D()
+            texture = rl.Texture()
             texture.id = gbuffer.position_texture
             texture.width = screen_width
             texture.height = screen_height
@@ -281,7 +281,7 @@ def main():
             rl.draw_text("POSITION TEXTURE", 10, screen_height - 30, 20, rl.DARKGREEN)
         
         elif mode == DeferredMode.NORMAL:
-            texture = rl.Texture2D()
+            texture = rl.Texture()
             texture.id = gbuffer.normal_texture
             texture.width = screen_width
             texture.height = screen_height
@@ -290,7 +290,7 @@ def main():
             rl.draw_text("NORMAL TEXTURE", 10, screen_height - 30, 20, rl.DARKGREEN)
         
         elif mode == DeferredMode.ALBEDO:
-            texture = rl.Texture2D()
+            texture = rl.Texture()
             texture.id = gbuffer.albedo_spec_texture
             texture.width = screen_width
             texture.height = screen_height

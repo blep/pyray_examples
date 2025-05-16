@@ -21,7 +21,7 @@ else:
 
 # Load custom render texture, create a writable depth texture buffer
 def load_render_texture_depth_tex(width, height):
-    target = rl.RenderTexture2D()
+    target = rl.RenderTexture()
 
     target.id = rl.rl_load_framebuffer()  # Load an empty framebuffer
 
@@ -48,11 +48,11 @@ def load_render_texture_depth_tex(width, height):
 
         # Check if fbo is complete with attachments (valid)
         if rl.rl_framebuffer_complete(target.id):
-            rl.tracelog(rl.LOG_INFO, f"FBO: [ID {target.id}] Framebuffer object created successfully")
+            rl.trace_log(rl.LOG_INFO, f"FBO: [ID {target.id}] Framebuffer object created successfully")
 
         rl.rl_disable_framebuffer()
     else:
-        rl.tracelog(rl.LOG_WARNING, "FBO: Framebuffer object can not be created")
+        rl.trace_log(rl.LOG_WARNING, "FBO: Framebuffer object can not be created")
 
     return target
 
@@ -96,7 +96,7 @@ def main():
     while not rl.window_should_close():     # Detect window close button or ESC key
         # Update
         #----------------------------------------------------------------------------------
-        rl.update_camera(rl.byref(camera), rl.CAMERA_ORBITAL)
+        rl.update_camera(camera, rl.CAMERA_ORBITAL)
         #----------------------------------------------------------------------------------
         
         # Draw

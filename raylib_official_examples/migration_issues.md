@@ -16,7 +16,6 @@ audio/:
 
  core/:
 - raylib_official_examples/core/core_3d_camera_first_person.py: Press P key => AttributeError: module 'pyray' has no attribute 'camera_yaw'
-- raylib_official_examples/core/core_automation_events.py: AttributeError: module 'pyray' has no attribute 'load_automation_events'
 - raylib_official_examples/core/core_custom_frame_control.py: AttributeError: module 'pyray' has no attribute 'get_target_fps'
 - raylib_official_examples/core/core_custom_logging.py: rl.set_trace_log_callback(custom_log), TypeError: initializer for ctype 'void(*)(int, char *, void *)' must be a cdata pointer, not CFunctionType
 - raylib_official_examples/core/core_drop_files.py: from raylib.defines import MAX_FILEPATH_SIZE
@@ -39,22 +38,19 @@ gui/:
   rl.gui_load_style_jungle()
   AttributeError: module 'pyray' has no attribute 'gui_load_style_jungle'
   Notes: all gui_load_style_*() functions seems to be missing (or are somewhere else)
-- raylib_official_examples/gui/image_exporter.py:
-  texture = rl.Texture2D()
-  ffi.error: undefined struct/union name: struct Texture2D *
 - raylib_official_examples/gui/floating_window.py:
   rl.gui_load_style_dark()
   AttributeError: module 'pyray' has no attribute 'gui_load_style_dark'
 - raylib_official_examples/gui/custom_sliders.py:  AttributeError: module 'pyray' has no attribute 'gui_draw_rectangle'
 - raylib_official_examples/gui/custom_file_dialog.py:
-  texture = rl.Texture2D()
-  ffi.error: undefined struct/union name : struct Texture2D *
+  rl.draw_rectangle_rounded_lines(dialog_rect, 0.2, 8, 2, rl.BLACK)
+  TypeError: DrawRectangleRoundedLines expected 4 arguments, got 5
 - raylib_official_examples/gui/custom_input_box.py:
   pressed = rl.gui_text_box_ex(bounds, text_value, RAYGUI_VALUEBOX_MAX_CHARS, edit_mode)
   AttributeError: module 'pyray' has no attribute 'gui_text_box_ex'
 - raylib_official_examples/gui/image_importer_raw.py:
-  texture = rl.Texture2D()
-  ffi.error: undefined struct/union name : struct Texture2D *
+  with open(dropped_files.paths[0], "rb") as image_file:
+  TypeError: expected str, bytes or os.PathLike object, not _CDataBase
 - raylib_official_examples/gui/property_list.py:
   bounds.y + (i * item_height) - scroll_ptr[0],
   TypeError: unsupported operand type(s) for -: 'float' and '_cffi_backend.__CDataOwn'
@@ -100,29 +96,17 @@ others/:
 	baseOperation = glBindVertexArray,
 	cArguments = (np.uint32(2),)
   )
-  => Notes: might just be because I running on an insanely old NVidia GeForce 750
+  => Notes: might just be because I'm running on an insanely old NVidia GeForce 750
 
 shaders/:
-- raylib_official_examples/shaders/shaders_deferred_render.py: Press key 1 (switch G buffer)
-  texture = rl.Texture2D()
-  ffi.error: undefined struct/union name : struct Texture2D *
 - raylib_official_examples/shaders/shaders_hybrid_render.py:
-  target = rl.RenderTexture2D()
-  ffi.error: undefined struct/union name: struct RenderTexture2D *
+  camera = rl.Camera3D( ..., position=...) 
+  TypeError: _make_struct_constructor_function.<locals>.func() got an unexpected keyword argument 'position'
 - raylib_official_examples/shaders/shaders_lightmap.py, 
   raylib_official_examples/shaders/shaders_mesh_instancing.py:
   mesh_texcoords2_ptr = rl.rl_malloc(mesh.vertexCount * 2 * ctypes.sizeof(rl.ffi.new("float *", 0))) 
   AttributeError: module 'pyray' has no attribute 'rl_malloc'
   => Notes: very low-level memory manipulation. Deep dive required to see how to adadpt to Python
-- raylib_official_examples/shaders/shaders_shadowmap.py:
-  target = rl.RenderTexture2D()
-  ffi.error: undefined struct/union name: struct RenderTexture2D *
-- raylib_official_examples/shaders/shaders_view_depth.py:
-  target = rl.RenderTexture2D()
-  ffi.error: undefined struct/union name : struct RenderTexture2D *
-- raylib_official_examples/shaders/shaders_write_depth.py:
-  target = rl.RenderTexture2D()
-  ffi.error: undefined struct/union name : struct RenderTexture2D *
 
 shapes/:
 - raylib_official_examples/shapes/shapes_easings_ball_anim.py,
@@ -136,9 +120,6 @@ shapes/:
     rl.rl_color4ub(color.r, color.g, color.b, color.a)
                    ^^^^^^^
   AttributeError: 'tuple' object has no attribute 'r'
-- raylib_official_examples/shapes/shapes_splines_drawing.py:
-   if rl.gui_dropdown_box(rl.Rectangle(12, 8 + 24, 140, 28), "LINEAR;BSPLINE;CATMULLROM;BEZIER", spline_type_active_ptr, spline_type_edit_mode_ptr):
-  TypeError: int() not supported on cdata '_Bool *'
 - raylib_official_examples/shapes/shapes_top_down_lights.py:
   => shadows are buggy. Likely comes from bad conversion of: (quickly fixed 2 invalid python code)
   vertices = lights[slot].shadows[i].vertices
@@ -154,8 +135,7 @@ text/:
   rl.draw_text_rec(font, text, rec, font_size, spacing, word_wrap, tint)
   AttributeError: module 'pyray' has no attribute 'draw_text_rec'
 - raylib_official_examples/text/text_unicode.py:
-  rl.draw_text(f"Message ({language}):", 40, (position_y - 30), 20, rl.DARKGRAY)
-  TypeError: an integer is required
+  emoji don't show, just some questionmarks in the background. 
 
 textures/:
 - raylib_official_examples/textures/textures_bunnymark.py: doesn't display any bunny. Bunny counter doesn't go up.

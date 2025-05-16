@@ -25,7 +25,7 @@ def main():
     
     rl.init_window(screen_width, screen_height, "raygui - image raw importer")
     
-    texture = rl.Texture2D()
+    texture = rl.Texture()
     
     # GUI controls initialization
     #----------------------------------------------------------------------------------
@@ -145,8 +145,9 @@ def main():
         # Draw
         #----------------------------------------------------------------------------------
         rl.begin_drawing()
-        
-        rl.clear_background(rl.get_color(rl.get_style(rl.DEFAULT, rl.BACKGROUND_COLOR)))
+
+        # PORT: "0xffff_ffff &" is a work-around for converting the negative int32 to uint32
+        rl.clear_background(rl.get_color(0xffff_ffff & rl.gui_get_style(rl.DEFAULT, rl.BACKGROUND_COLOR)))
         
         if texture.id != 0:
             rl.draw_texture_ex(texture, 
@@ -156,8 +157,9 @@ def main():
             rl.draw_text(f"SCALE x{int(image_scale)}", 20, screen_height - 40, 20, 
                         rl.get_color(rl.get_style(rl.DEFAULT, rl.LINE_COLOR)))
         else:
+            # PORT: "0xffff_ffff &" is a work-around for converting the negative int32 to uint32
             rl.draw_text("drag & drop RAW image file", 320, 180, 10, 
-                        rl.get_color(rl.get_style(rl.DEFAULT, rl.LINE_COLOR)))
+                        rl.get_color(0xffff_ffff & rl.gui_get_style(rl.DEFAULT, rl.LINE_COLOR)))
         
         # raygui: controls drawing
         #----------------------------------------------------------------------------------

@@ -11,6 +11,7 @@ core/core_3d_camera_free.py
 core/core_3d_camera_mode.py
 core/core_3d_camera_split_screen.py
 core/core_3d_picking.py
+core/core_automation_events.py
 core/core_basic_screen_manager.py
 core/core_basic_window.py
 core/core_basic_window_web.py
@@ -32,6 +33,7 @@ core/core_window_flags.py
 core/core_window_letterbox.py
 core/core_window_should_close.py
 core/core_world_screen.py
+gui/image_exporter.py
 gui/portable_window.py
 gui/scroll_panel.py
 gui/standalone.py
@@ -61,6 +63,7 @@ shaders/rlights.py
 shaders/shaders_basic_lighting.py
 shaders/shaders_basic_pbr.py
 shaders/shaders_custom_uniform.py
+shaders/shaders_deferred_render.py
 shaders/shaders_eratosthenes.py
 shaders/shaders_fog.py
 shaders/shaders_hot_reloading.py
@@ -71,6 +74,7 @@ shaders/shaders_palette_switch.py
 shaders/shaders_postprocessing.py
 shaders/shaders_raymarching.py
 shaders/shaders_rounded_rectangle.py
+shaders/shaders_shadowmap.py
 shaders/shaders_shapes_textures.py
 shaders/shaders_simple_mask.py
 shaders/shaders_spotlight.py
@@ -79,6 +83,8 @@ shaders/shaders_texture_outline.py
 shaders/shaders_texture_tiling.py
 shaders/shaders_texture_waves.py
 shaders/shaders_vertex_displacement.py
+shaders/shaders_view_depth.py
+shaders/shaders_write_depth.py
 shapes/shapes_basic_shapes.py
 shapes/shapes_bouncing_ball.py
 shapes/shapes_collision_area.py
@@ -91,6 +97,7 @@ shapes/shapes_lines_bezier.py
 shapes/shapes_logo_raylib.py
 shapes/shapes_logo_raylib_anim.py
 shapes/shapes_rectangle_scaling.py
+shapes/shapes_splines_drawing.py
 text/text_font_filters.py
 text/text_font_loading.py
 text/text_font_sdf.py

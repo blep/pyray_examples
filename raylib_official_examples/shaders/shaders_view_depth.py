@@ -20,7 +20,7 @@ else:
     GLSL_VERSION = 330
 
 def load_render_texture_with_depth(width, height):
-    target = rl.RenderTexture2D()
+    target = rl.RenderTexture()
 
     target.id = rl.rl_load_framebuffer()  # Load an empty framebuffer
 
@@ -47,11 +47,11 @@ def load_render_texture_with_depth(width, height):
 
         # Check if fbo is complete with attachments (valid)
         if rl.rl_framebuffer_complete(target.id):
-            rl.tracelog(rl.LOG_INFO, f"FBO: [ID {target.id}] Framebuffer object created successfully")
+            rl.trace_log(rl.LOG_INFO, f"FBO: [ID {target.id}] Framebuffer object created successfully")
 
         rl.rl_disable_framebuffer()
     else:
-        rl.tracelog(rl.LOG_WARNING, "FBO: Framebuffer object can not be created")
+        rl.trace_log(rl.LOG_WARNING, "FBO: Framebuffer object can not be created")
 
     return target
 
@@ -93,7 +93,7 @@ def main():
     while not rl.window_should_close():        # Detect window close button or ESC key
         # Update
         #----------------------------------------------------------------------------------
-        rl.update_camera(rl.byref(camera), rl.CAMERA_FREE)
+        rl.update_camera(camera, rl.CAMERA_FREE)
         #----------------------------------------------------------------------------------
 
         # Draw

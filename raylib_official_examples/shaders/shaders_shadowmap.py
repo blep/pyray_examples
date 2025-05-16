@@ -22,7 +22,7 @@ else:
 SHADOWMAP_RESOLUTION = 1024
 
 def load_shadowmap_render_texture(width, height):
-    target = rl.RenderTexture2D()
+    target = rl.RenderTexture()
 
     target.id = rl.rl_load_framebuffer()  # Load an empty framebuffer
     target.texture.width = width
@@ -44,11 +44,11 @@ def load_shadowmap_render_texture(width, height):
 
         # Check if fbo is complete with attachments (valid)
         if rl.rl_framebuffer_complete(target.id):
-            rl.tracelog(rl.LOG_INFO, f"FBO: [ID {target.id}] Framebuffer object created successfully")
+            rl.trace_log(rl.LOG_INFO, f"FBO: [ID {target.id}] Framebuffer object created successfully")
 
         rl.rl_disable_framebuffer()
     else:
-        rl.tracelog(rl.LOG_WARNING, "FBO: Framebuffer object can not be created")
+        rl.trace_log(rl.LOG_WARNING, "FBO: Framebuffer object can not be created")
 
     return target
 
@@ -138,7 +138,7 @@ def main():
 
         camera_pos = rl.ffi.new("Vector3 *", [cam.position.x, cam.position.y, cam.position.z])
         rl.set_shader_value(shadow_shader, shadow_shader.locs[rl.SHADER_LOC_VECTOR_VIEW], camera_pos, rl.SHADER_UNIFORM_VEC3)
-        rl.update_camera(rl.byref(cam), rl.CAMERA_ORBITAL)
+        rl.update_camera(cam, rl.CAMERA_ORBITAL)
 
         fc += 1
         fc %= robot_animations[0].frameCount

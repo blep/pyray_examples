@@ -47,7 +47,7 @@ def main():
     dialog_rect = rl.Rectangle(screen_width/2 - 200, screen_height/2 - 150, 400, 300)
     
     # Image texture to display
-    texture = rl.Texture2D()
+    texture = rl.Texture()
     file_name_to_load = ""
 
     rl.set_target_fps(60)
@@ -92,7 +92,8 @@ def main():
         #----------------------------------------------------------------------------------
         rl.begin_drawing()
 
-        rl.clear_background(rl.get_color(rl.gui_get_style(rl.DEFAULT, rl.BACKGROUND_COLOR)))
+        # PORT: "0xffff_ffff &" is a work-around for converting the negative int32 to uint32
+        rl.clear_background(rl.get_color(0xffff_ffff & rl.gui_get_style(rl.DEFAULT, rl.BACKGROUND_COLOR)))
 
         # Draw the loaded texture if any
         if texture.id != 0:

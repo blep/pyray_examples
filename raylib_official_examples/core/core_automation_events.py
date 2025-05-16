@@ -60,11 +60,9 @@ def main():
     camera.zoom = 1.0
 
     # Automation events
-    # Create an empty list structure. load_automation_events(None) is specific to pyray for this.
-    aelist = rl.load_automation_events(None) 
+    aelist = rl.load_automation_event_list("")
     # Tell raylib to record into this list instance if recording starts.
-    # We pass it by reference using ctypes.byref().
-    rl.set_automation_event_list(ctypes.byref(aelist))
+    rl.set_automation_event_list(aelist)
     
     event_recording = False
     event_playing = False
@@ -210,8 +208,8 @@ def main():
                     # For safety, let's unload if it has events, then re-init for recording.
                     if aelist.events:
                         rl.unload_automation_event_list(aelist)
-                    aelist = rl.load_automation_events(None) # Get a fresh, empty list
-                    rl.set_automation_event_list(ctypes.byref(aelist)) # Point raylib to the new list
+                    aelist = rl.load_automation_event_list("") # Get a fresh, empty list
+                    rl.set_automation_event_list(aelist) # Point raylib to the new list
 
                     rl.set_automation_event_base_frame(automation_frame_counter) # C example used 180, here using current for flexibility
                     rl.start_automation_event_recording()

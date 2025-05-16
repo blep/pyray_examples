@@ -29,10 +29,10 @@ def main():
     window_box_rec = rl.Rectangle(screen_width/2 - 110, screen_height/2 - 100, 220, 190)
     window_box_active = False
     
-    file_format_active = 0
+    file_format_active_ptr = rl.ffi.new('int *', 0)
     file_format_text_list = ["IMAGE (.png)", "DATA (.raw)", "CODE (.h)"]
 
-    pixel_format_active = 0
+    pixel_format_active_ptr = rl.ffi.new('int *', 0)
     pixel_format_text_list = ["GRAYSCALE", "GRAY ALPHA", "R5G6B5", "R8G8B8", "R5G5B5A1", "R4G4B4A4", "R8G8B8A8"]
 
     text_box_edit_mode = False
@@ -40,7 +40,7 @@ def main():
     #--------------------------------------------------------------------------------------
     
     image = rl.Image()
-    texture = rl.Texture2D()
+    texture = rl.Texture()
     
     image_loaded = False
     image_scale = 1.0
@@ -73,7 +73,7 @@ def main():
                     texture = rl.load_texture_from_image(image)
                     
                     image_loaded = True
-                    pixel_format_active = image.format - 1
+                    pixel_format_active_ptr[0] = image.format - 1
                     
                     if texture.height > texture.width:
                         image_scale = (screen_height - 100)/texture.height
@@ -84,13 +84,13 @@ def main():
     
         if btn_export_pressed:
             if image_loaded:
-                rl.image_format(rl.byref(image), pixel_format_active + 1)
+                rl.image_format(image, pixel_format_active_ptr[0] + 1)
                 
-                if file_format_active == 0:        # PNG
+                if file_format_active_ptr[0] == 0:        # PNG
                     if (rl.get_file_extension(file_name) is None) or (not rl.is_file_extension(file_name, ".png")):
                         file_name += ".png"
                     rl.export_image(image, file_name)
-                elif file_format_active == 1:   # RAW
+                elif file_format_active_ptr[0] == 1:   # RAW
                     if (rl.get_file_extension(file_name) is None) or (not rl.is_file_extension(file_name, ".raw")):
                         file_name += ".raw"
                     
@@ -100,7 +100,7 @@ def main():
                     raw_data = rl.ffi.buffer(image.data, data_size)
                     with open(file_name, "wb") as raw_file:
                         raw_file.write(raw_data)
-                elif file_format_active == 2:   # CODE
+                elif file_format_active_ptr[0] == 2:   # CODE
                     rl.export_image_as_code(image, file_name)
             
             window_box_active = False
@@ -137,8 +137,9 @@ def main():
             
             border_color = rl.RED if rl.check_collision_point_rec(rl.get_mouse_position(), image_rec) else rl.DARKGRAY
             rl.draw_rectangle_lines_ex(image_rec, 1, border_color)
+            # PORT: "0xffff_ffff &" is a work-around for converting the negative int32 to uint32
             rl.draw_text(f"SCALE: {image_scale*100.0:.2f}%", 20, screen_height - 40, 20, 
-                        rl.get_color(rl.gui_get_style(rl.DEFAULT, rl.LINE_COLOR)))
+                        rl.get_color(0xffff_ffff & rl.gui_get_style(rl.DEFAULT, rl.LINE_COLOR)))
         else:
             rl.draw_text("DRAG & DROP YOUR IMAGE!", 350, 200, 10, rl.DARKGRAY)
             rl.gui_disable()
@@ -150,18 +151,19 @@ def main():
         # Draw window box: windowBoxName
         #-----------------------------------------------------------------------------
         if window_box_active:
-            rl.draw_rectangle(0, 0, screen_width, screen_height, 
-                              rl.fade(rl.get_color(rl.gui_get_style(rl.DEFAULT, rl.BACKGROUND_COLOR)), 0.7))
+            # PORT: "0xffff_ffff &" is a work-around for converting the negative int32 to uint32
+            rl.draw_rectangle(0, 0, screen_width, screen_height,
+                              rl.fade(rl.get_color(0xffff_ffff & rl.gui_get_style(rl.DEFAULT, rl.BACKGROUND_COLOR)), 0.7))
             result = rl.gui_window_box(rl.Rectangle(window_box_rec.x, window_box_rec.y, 220, 190), "Image Export Options")
             window_box_active = not result
         
             rl.gui_label(rl.Rectangle(window_box_rec.x + 10, window_box_rec.y + 35, 60, 25), "File format:")
             rl.gui_combo_box(rl.Rectangle(window_box_rec.x + 80, window_box_rec.y + 35, 130, 25), 
-                            ";".join(file_format_text_list), file_format_active)
+                            ";".join(file_format_text_list), file_format_active_ptr)
             
             rl.gui_label(rl.Rectangle(window_box_rec.x + 10, window_box_rec.y + 70, 63, 25), "Pixel format:")
             rl.gui_combo_box(rl.Rectangle(window_box_rec.x + 80, window_box_rec.y + 70, 130, 25), 
-                            ";".join(pixel_format_text_list), pixel_format_active)
+                            ";".join(pixel_format_text_list), pixel_format_active_ptr)
             
             rl.gui_label(rl.Rectangle(window_box_rec.x + 10, window_box_rec.y + 105, 50, 25), "File name:")
             if rl.gui_text_box(rl.Rectangle(window_box_rec.x + 80, window_box_rec.y + 105, 130, 25), file_name, 64, text_box_edit_mode):
