@@ -1,6 +1,8 @@
 # pyray_examples
 
-Examples for [pyray](), migrated to Python from the raylib C examples.
+This repo contains example programs for [pyray](https://github.com/electronstudio/raylib-python-cffi), the Python 
+bindings for the [raylib](https://github.com/raysan5/raylib) library. All examples have been migrated from the 
+official raylib C examples.
 
 Original C examples:
 - [raylib](https://github.com/raysan5/raylib/tree/master/examples)
@@ -51,9 +53,11 @@ Tools used:
   - Model: mostly "Claude 3.7 Sonnet", but initially "Gemini 2.5 Pro (Preview)" (as of 2025-05-14). 
     Unfortunately, Gemini started returning constant 500 Server Error so I switched to Claude which felt slower...
 	
-The original C examples were copied into the repo directory (the Copilot Agent is only allowed to access files within the project directory).
+The original C examples were copied into the repo directory (the Copilot Agent is only allowed to access files within 
+the project directory).
 
-You can find a rough [log of the prompts here](prompts/migrate_to_py.md), though, midway I started just updating the last one as it was growing too big.
+You can find a rough [log of the prompts here](prompts/migrate_to_py.md), though, midway I started just updating the 
+last one as it was growing too big.
 
 ## Main migration prompt
 
