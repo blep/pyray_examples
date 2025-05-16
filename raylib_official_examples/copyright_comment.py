@@ -148,16 +148,16 @@ def main():
     args = parser.parse_args()
     
     # Paths relative to script directory
-    raylib_py_examples = REPO_DIR / 'raylib_official_examples'
+    raylib_official_examples = REPO_DIR / 'raylib_official_examples'
     raylib_c_examples = REPO_DIR / 'raylib_c_examples'
     
     # Verify directories exist
-    if not raylib_py_examples.exists() or not raylib_c_examples.exists():
-        logging.error(f"Directories not found. Looking for {raylib_py_examples} and {raylib_c_examples}")
+    if not raylib_official_examples.exists() or not raylib_c_examples.exists():
+        logging.error(f"Directories not found. Looking for {raylib_official_examples} and {raylib_c_examples}")
         return 1
     
-    # Find all Python files in raylib_py_examples and subdirectories
-    py_files = list(raylib_py_examples.glob('**/*.py'))
+    # Find all Python files in raylib_official_examples and subdirectories
+    py_files = list(raylib_official_examples.glob('**/*.py'))
     
     processed_count = 0
     updated_count = 0
@@ -168,11 +168,11 @@ def main():
             continue
             
         # Find the corresponding C file with special handling for gui directory
-        c_file = find_matching_c_file(py_file, raylib_py_examples, raylib_c_examples)
+        c_file = find_matching_c_file(py_file, raylib_official_examples, raylib_c_examples)
         
         # Verify the C file exists
         if not c_file:
-            rel_path = py_file.relative_to(raylib_py_examples)
+            rel_path = py_file.relative_to(raylib_official_examples)
             logging.warning(f"No corresponding C file found for {rel_path}")
             continue
         
@@ -190,12 +190,12 @@ def main():
         
         # Check if content would actually change with more accurate comparison
         if new_content == original_content:
-            rel_path = py_file.relative_to(raylib_py_examples)
+            rel_path = py_file.relative_to(raylib_official_examples)
             logging.info(f"No changes needed for {rel_path}")
             continue
             
         updated_count += 1
-        rel_path = py_file.relative_to(raylib_py_examples)
+        rel_path = py_file.relative_to(raylib_official_examples)
         
         if args.do:
             # When --do is passed but --yes is not, prompt for confirmation

@@ -35,10 +35,10 @@ def main():
 
     # Attempt to load shader. Handle potential file not found issues.
     # NOTE: pyray examples often keep resources in a 'resources' subdirectory.
-    # This example assumes the shader is in 'raylib_py_examples/core/resources/' or similar.
+    # This example assumes the shader is in 'raylib_official_examples/core/resources/' or similar.
     # Adjust the path as necessary for your project structure.
     try:
-        distortion = rl.load_shader(None, f"raylib_py_examples/core/resources/distortion{GLSL_VERSION}.fs")
+        distortion = rl.load_shader(None, f"raylib_official_examples/core/resources/distortion{GLSL_VERSION}.fs")
     except Exception as e:
         print(f"Failed to load shader: {e}")
         # Fallback or error handling if shader is not found
