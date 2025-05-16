@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
 Script to migrate comments from C files to Python docstrings.
+
+Scripts generated automatically by tool, so use with care.
 """
 import argparse
 import difflib
@@ -140,13 +142,13 @@ def find_matching_c_file(py_file, py_examples_dir, c_examples_dir):
 def main():
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     
-    parser = argparse.ArgumentParser(description='Migrate C comments to Python docstrings')
+    parser = argparse.ArgumentParser(description='Migrate C licensing comments to Python docstrings')
     parser.add_argument('--do', action='store_true', help='Apply changes to files')
     parser.add_argument('-y', '--yes', action='store_true', help='Apply all changes without prompting')
     args = parser.parse_args()
     
     # Paths relative to script directory
-    raylib_py_examples = REPO_DIR / 'raylib_py_examples'
+    raylib_py_examples = REPO_DIR / 'raylib_official_examples'
     raylib_c_examples = REPO_DIR / 'raylib_c_examples'
     
     # Verify directories exist
