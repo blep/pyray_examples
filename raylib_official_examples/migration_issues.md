@@ -138,7 +138,6 @@ text/:
   emoji don't show, just some questionmarks in the background. 
 
 textures/:
-- raylib_official_examples/textures/textures_bunnymark.py: doesn't display any bunny. Bunny counter doesn't go up.
 - raylib_official_examples/textures/textures_image_kernel.py:
   sharpen_kernel = normalize_kernel(sharpen_kernel, 9)
   # ...

@@ -44,7 +44,7 @@ The license of the original C examples [has been preserved](raylib_official_exam
 
 ## Examples status
 
-Note that not all examples work: 131/174 (~75%) examples work without issues.
+Note that not all examples work: 131/173 (~76%) examples work without issues.
 
 See [migration_issues](raylib_official_examples/migration_issues.md) for the list of examples with known issues, 
 and a brief description of the issue. Note that some examples run, but some actions cause crashes. The action is 

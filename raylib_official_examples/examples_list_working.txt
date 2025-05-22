@@ -58,7 +58,6 @@ models/models_waving_cubes.py
 models/models_yaw_pitch_roll.py
 others/raymath_vector_angle.py
 others/rlgl_compute_shader.py
-raylib_menu.py
 shaders/rlights.py
 shaders/shaders_basic_lighting.py
 shaders/shaders_basic_pbr.py
@@ -108,6 +107,7 @@ text/text_rectangle_bounds.py
 text/text_writing_anim.py
 textures/textures_background_scrolling.py
 textures/textures_blend_modes.py
+textures/textures_bunnymark.py
 textures/textures_draw_tiled.py
 textures/textures_fog_of_war.py
 textures/textures_gif_player.py
