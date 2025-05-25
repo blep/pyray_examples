@@ -12,6 +12,7 @@ Copyright (c) 2013-2025 Ramon Santamaria (@raysan5)
 
 This source has been converted from C raylib examples to Python.
 """
+from pathlib import Path
 
 import pyray as rl
 
@@ -19,6 +20,8 @@ import pyray as rl
 XBOX_ALIAS_1 = "xbox"
 XBOX_ALIAS_2 = "x-box"
 PS_ALIAS = "playstation"
+
+THIS_DIR = Path(__file__).resolve().parent
 
 def main():
     # Initialization
@@ -31,8 +34,8 @@ def main():
     rl.init_window(screen_width, screen_height, "raylib [core] example - gamepad input")
 
     # NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-    tex_ps3_pad = rl.load_texture("e:/prg/prj/puzzlator-py-raylib/raylib_c_examples/core/resources/ps3.png")
-    tex_xbox_pad = rl.load_texture("e:/prg/prj/puzzlator-py-raylib/raylib_c_examples/core/resources/xbox.png")
+    tex_ps3_pad = rl.load_texture(str(THIS_DIR/"resources/ps3.png"))
+    tex_xbox_pad = rl.load_texture(str(THIS_DIR/"resources/xbox.png"))
 
     # Set axis deadzones
     left_stick_deadzone_x = 0.1
