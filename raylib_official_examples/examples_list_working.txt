@@ -1,8 +1,10 @@
+audio/audio_mixed_processor.py
 audio/audio_module_playing.py
 audio/audio_music_stream.py
 audio/audio_raw_stream.py
 audio/audio_sound_loading.py
 audio/audio_sound_multi.py
+audio/audio_stream_effects.py
 copyright_comment.py
 core/core_2d_camera.py
 core/core_2d_camera_mouse_zoom.py

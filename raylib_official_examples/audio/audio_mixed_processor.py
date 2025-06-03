@@ -8,9 +8,12 @@ Copyright (c) 2023-2025 hkc (@hatkidchan)
 
 This source has been converted from C raylib examples to Python.
 """
+from pathlib import Path
 
 import pyray as rl
 import math
+
+THIS_DIR = Path(__file__).resolve().parent
 
 exponent = 1.0  # Audio exponentiation value
 average_volume = [0.0] * 400  # Average volume history
@@ -45,10 +48,12 @@ def main():
 
     rl.init_audio_device()  # Initialize audio device
 
-    rl.attach_audio_mixed_processor(process_audio)
+    # rl.ffi.callback() creates a trampoline to convert the C function call done by raylib to a python function call.
+    c_process_audio = rl.ffi.callback("void(void*, unsigned int)")(process_audio)
+    rl.attach_audio_mixed_processor(c_process_audio)
 
-    music = rl.load_music_stream("raylib_c_examples/audio/resources/country.mp3") # Adjusted path
-    sound = rl.load_sound("raylib_c_examples/audio/resources/coin.wav") # Adjusted path
+    music = rl.load_music_stream(str( THIS_DIR / "resources/country.mp3" ))
+    sound = rl.load_sound(str( THIS_DIR / "resources/coin.wav" ))
 
     rl.play_music_stream(music)
 
@@ -97,7 +102,7 @@ def main():
     # De-Initialization
     rl.unload_music_stream(music)  # Unload music stream buffers from RAM
 
-    rl.detach_audio_mixed_processor(process_audio)  # Disconnect audio processor
+    rl.detach_audio_mixed_processor(c_process_audio)  # Disconnect audio processor
 
     rl.close_audio_device()  # Close audio device (music streaming is automatically stopped)
 

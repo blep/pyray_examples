@@ -7,9 +7,7 @@ The template for the issues is:
 
 
 audio/:
-- raylib_official_examples/audio/audio_mixed_processor.py: TypeError: initializer for ctype 'void(*)(void *, unsigned int)' must be a cdata pointer, not function
-- raylib_official_examples/audio/audio_sound_positioning.py: TypeError: _make_struct_constructor_function.<locals>.func() got an unexpected keyword argument 'position'
-- raylib_official_examples/audio/audio_stream_effects.py: Pressd key D or F: TypeError: initializer for ctype 'void(*)(void *, unsigned int)' must be a cdata pointer, not CFunctionType
+- raylib_official_examples/audio/audio_sound_positioning.py: TypeError: _make_struct_constructor_function.<locals>.func() got an unexpected keyword argument 'position' (Camera3D)
 
  core/:
 - raylib_official_examples/core/core_3d_camera_first_person.py: Press P key => AttributeError: module 'pyray' has no attribute 'camera_yaw'

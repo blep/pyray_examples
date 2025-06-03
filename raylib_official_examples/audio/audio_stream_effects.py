@@ -24,7 +24,6 @@ delay_write_index = 0
 low = [0.0, 0.0]
 
 # Audio effect: lowpass filter
-@ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_uint)
 def audio_process_effect_lpf(buffer, frames):
     global low
 
@@ -32,7 +31,7 @@ def audio_process_effect_lpf(buffer, frames):
     k = cutoff / (cutoff + 0.1591549431)  # RC filter formula
 
     # Converts the buffer data before using it
-    buffer_data = ctypes.cast(buffer, ctypes.POINTER(ctypes.c_float))
+    buffer_data = rl.ffi.cast("float *", buffer)
     
     for i in range(0, frames * 2, 2):
         l = buffer_data[i]
@@ -43,14 +42,14 @@ def audio_process_effect_lpf(buffer, frames):
         
         buffer_data[i] = low[0]
         buffer_data[i + 1] = low[1]
+c_audio_process_effect_lpf = rl.ffi.callback("void(void*, unsigned int)")(audio_process_effect_lpf)
 
 # Audio effect: delay
-@ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_uint)
 def audio_process_effect_delay(buffer, frames):
     global delay_buffer, delay_buffer_size, delay_read_index, delay_write_index
     
-    buffer_data = ctypes.cast(buffer, ctypes.POINTER(ctypes.c_float))
-    
+    buffer_data = rl.ffi.cast("float *", buffer)
+
     for i in range(0, frames * 2, 2):
         left_delay = delay_buffer[delay_read_index]
         delay_read_index += 1
@@ -70,6 +69,7 @@ def audio_process_effect_delay(buffer, frames):
         
         if delay_write_index == delay_buffer_size:
             delay_write_index = 0
+c_audio_process_effect_delay = rl.ffi.callback("void(void*, unsigned int)")(audio_process_effect_delay)
 
 # Initialization
 #--------------------------------------------------------------------------------------
@@ -121,17 +121,17 @@ while not rl.window_should_close():    # Detect window close button or ESC key
     if rl.is_key_pressed(rl.KEY_F):
         enable_effect_lpf = not enable_effect_lpf
         if enable_effect_lpf:
-            rl.attach_audio_stream_processor(music.stream, audio_process_effect_lpf)
+            rl.attach_audio_stream_processor(music.stream, c_audio_process_effect_lpf)
         else:
-            rl.detach_audio_stream_processor(music.stream, audio_process_effect_lpf)
+            rl.detach_audio_stream_processor(music.stream, c_audio_process_effect_lpf)
 
     # Add/Remove effect: delay
     if rl.is_key_pressed(rl.KEY_D):
         enable_effect_delay = not enable_effect_delay
         if enable_effect_delay:
-            rl.attach_audio_stream_processor(music.stream, audio_process_effect_delay)
+            rl.attach_audio_stream_processor(music.stream, c_audio_process_effect_delay)
         else:
-            rl.detach_audio_stream_processor(music.stream, audio_process_effect_delay)
+            rl.detach_audio_stream_processor(music.stream, c_audio_process_effect_delay)
     
     # Get normalized time played for current music stream
     time_played = rl.get_music_time_played(music) / rl.get_music_time_length(music)
