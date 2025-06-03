@@ -102,11 +102,6 @@ shaders/:
 - raylib_official_examples/shaders/shaders_hybrid_render.py:
   camera = rl.Camera3D( ..., position=...) 
   TypeError: _make_struct_constructor_function.<locals>.func() got an unexpected keyword argument 'position'
-- raylib_official_examples/shaders/shaders_lightmap.py, 
-  raylib_official_examples/shaders/shaders_mesh_instancing.py:
-  mesh_texcoords2_ptr = rl.rl_malloc(mesh.vertexCount * 2 * ctypes.sizeof(rl.ffi.new("float *", 0))) 
-  AttributeError: module 'pyray' has no attribute 'rl_malloc'
-  => Notes: very low-level memory manipulation. Deep dive required to see how to adadpt to Python
 
 shapes/:
 - raylib_official_examples/shapes/shapes_easings_ball_anim.py,

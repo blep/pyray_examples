@@ -46,20 +46,17 @@ def main():
     mesh = rl.gen_mesh_plane(MAP_SIZE, MAP_SIZE, 1, 1)
 
     # GenMeshPlane doesn't generate texcoords2 so we will upload them separately
-    texcoords2 = rl.ffi.new("float[]", [
+    texcoords2 = [
         0.0, 0.0,  # First vertex
         1.0, 0.0,  # Second vertex
         0.0, 1.0,  # Third vertex
-        1.0, 1.0   # Fourth vertex
-    ])
-    
-    # Copy the texcoords2 data to mesh
-    mesh_texcoords2_ptr = rl.rl_malloc(mesh.vertexCount * 2 * ctypes.sizeof(rl.ffi.new("float *", 0)))
-    rl.ffi.memmove(mesh_texcoords2_ptr, texcoords2, 8 * ctypes.sizeof(rl.ffi.new("float *", 0)))
-    mesh.texcoords2 = mesh_texcoords2_ptr
+        1.0, 1.0  # Fourth vertex
+    ]
+    mesh.texcoords2 = rl.ffi.new("float[]", texcoords2)
 
     # Load a new texcoords2 attributes buffer
-    mesh.vboId[rl.SHADER_LOC_VERTEX_TEXCOORD02] = rl.rl_load_vertex_buffer(mesh.texcoords2, mesh.vertexCount * 2 * ctypes.sizeof(rl.ffi.new("float *", 0)), False)
+    mesh.vboId[rl.SHADER_LOC_VERTEX_TEXCOORD02] = rl.rl_load_vertex_buffer(
+        mesh.texcoords2, rl.ffi.sizeof("float") * len(texcoords2), False)
     rl.rl_enable_vertex_array(mesh.vaoId)
     
     # Index 5 is for texcoords2
@@ -76,7 +73,7 @@ def main():
     texture = rl.load_texture(str(THIS_DIR/"resources/cubicmap_atlas.png"))
     light = rl.load_texture(str(THIS_DIR/"resources/spark_flame.png"))
 
-    rl.gen_texture_mipmaps(rl.byref(texture))
+    rl.gen_texture_mipmaps(texture)
     rl.set_texture_filter(texture, rl.TEXTURE_FILTER_TRILINEAR)
 
     lightmap = rl.load_render_texture(MAP_SIZE, MAP_SIZE)
@@ -127,7 +124,7 @@ def main():
     while not rl.window_should_close():        # Detect window close button or ESC key
         # Update
         #----------------------------------------------------------------------------------
-        rl.update_camera(rl.byref(camera), rl.CAMERA_ORBITAL)
+        rl.update_camera(camera, rl.CAMERA_ORBITAL)
         #----------------------------------------------------------------------------------
 
         # Draw

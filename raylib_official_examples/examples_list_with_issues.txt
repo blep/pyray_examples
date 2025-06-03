@@ -27,8 +27,6 @@ others/embedded_files_loading.py
 others/raylib_opengl_interop.py
 others/rlgl_standalone.py
 shaders/shaders_hybrid_render.py
-shaders/shaders_lightmap.py
-shaders/shaders_mesh_instancing.py
 shapes/shapes_easings_ball_anim.py
 shapes/shapes_easings_box_anim.py
 shapes/shapes_easings_rectangle_array.py

@@ -67,6 +67,8 @@ shaders/shaders_eratosthenes.py
 shaders/shaders_fog.py
 shaders/shaders_hot_reloading.py
 shaders/shaders_julia_set.py
+shaders/shaders_lightmap.py
+shaders/shaders_mesh_instancing.py
 shaders/shaders_model_shader.py
 shaders/shaders_multi_sample2d.py
 shaders/shaders_palette_switch.py
