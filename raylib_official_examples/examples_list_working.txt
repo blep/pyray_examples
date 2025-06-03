@@ -1,5 +1,6 @@
 audio/audio_module_playing.py
 audio/audio_music_stream.py
+audio/audio_raw_stream.py
 audio/audio_sound_loading.py
 audio/audio_sound_multi.py
 copyright_comment.py

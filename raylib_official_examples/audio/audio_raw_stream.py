@@ -40,8 +40,7 @@ def audio_input_callback(buffer, frames):
     
     incr = audio_frequency / 44100.0
     
-    # Cast buffer to short array using ctypes
-    d = ctypes.cast(buffer, ctypes.POINTER(ctypes.c_short))
+    d = rl.ffi.cast("short *", buffer)
     
     for i in range(frames):
         d[i] = int(32000.0 * math.sin(2 * math.pi * sine_idx))
@@ -67,7 +66,9 @@ def main():
     stream = rl.load_audio_stream(44100, 16, 1)
     
     # Set the callback using the correct function from PyRay
-    rl.set_audio_stream_callback(stream, audio_input_callback)
+    # rl.ffi.callback() creates a trampoline to convert the C function call done by raylib to a python function call.
+    c_audio_input_callback = rl.ffi.callback("void(void*, unsigned int)")(audio_input_callback)
+    rl.set_audio_stream_callback(stream, c_audio_input_callback)
     
     # Buffer for the single cycle waveform we are synthesizing
     data = (ctypes.c_short * MAX_SAMPLES)()

@@ -8,9 +8,6 @@ The template for the issues is:
 
 audio/:
 - raylib_official_examples/audio/audio_mixed_processor.py: TypeError: initializer for ctype 'void(*)(void *, unsigned int)' must be a cdata pointer, not function
-- raylib_official_examples/audio/audio_raw_stream.py:
-  rl.set_audio_stream_callback(stream, audio_input_callback)
-  TypeError: initializer for ctype 'void(*)(void *, unsigned int)' must be a cdata pointer, not function
 - raylib_official_examples/audio/audio_sound_positioning.py: TypeError: _make_struct_constructor_function.<locals>.func() got an unexpected keyword argument 'position'
 - raylib_official_examples/audio/audio_stream_effects.py: Pressd key D or F: TypeError: initializer for ctype 'void(*)(void *, unsigned int)' must be a cdata pointer, not CFunctionType
 
