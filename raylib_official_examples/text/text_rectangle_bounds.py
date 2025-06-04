@@ -11,36 +11,40 @@ This source has been converted from C raylib examples to Python.
 
 import pyray as rl
 
-# Draw text using font inside rectangle limits
+# Implement draw_text_boxed to render text within a rectangle
 def draw_text_boxed(font, text, rec, font_size, spacing, word_wrap, tint):
     draw_text_boxed_selectable(font, text, rec, font_size, spacing, word_wrap, tint, 0, 0, rl.WHITE, rl.WHITE)
 
-# Draw text using font inside rectangle limits with support for text selection
+# Implement draw_text_boxed_selectable to support text selection
 def draw_text_boxed_selectable(font, text, rec, font_size, spacing, word_wrap, tint, select_start, select_length, select_tint, select_back_tint):
-    length = len(text)  # Total length in bytes of the text, scanned by codepoints in loop
+    scale_factor = font_size / font.baseSize
 
-    text_offset_y = 0          # Offset between lines (on line break '\n')
-    text_offset_x = 0.0        # Offset X to next character to draw
+    text_offset_x = 0.0
+    text_offset_y = 0.0
 
-    scale_factor = font_size / float(font.baseSize)     # Character rectangle scaling factor
+    for i, char in enumerate(text):
+        if char == '\n':
+            text_offset_x = 0.0
+            text_offset_y += font_size + spacing
+            continue
 
-    # Word/character wrapping mechanism variables
-    MEASURE_STATE = 0
-    DRAW_STATE = 1
-    state = MEASURE_STATE if word_wrap else DRAW_STATE
+        glyph_index = rl.get_glyph_index(font, ord(char))
+        glyph = font.glyphs[glyph_index]
 
-    start_line = -1         # Index where to begin drawing (where a line begins)
-    end_line = -1           # Index where to stop drawing (where a line ends)
-    lastk = -1              # Holds last value of the character position
+        glyph_width = glyph.advanceX * scale_factor
 
-    i = 0
-    k = 0
-    
-    # This is a simplified version of the text box rendering
-    # In real implementation, you would need a more complex character-by-character processing
-    
-    # For simplicity, we'll use raylib's built-in functions to draw text with wrapping
-    rl.draw_text_rec(font, text, rec, font_size, spacing, word_wrap, tint)
+        if word_wrap and (text_offset_x + glyph_width > rec.width):
+            text_offset_x = 0.0
+            text_offset_y += font_size + spacing
+
+        if text_offset_y + font_size > rec.height:
+            break
+
+        position = rl.Vector2(rec.x + text_offset_x, rec.y + text_offset_y)
+
+        rl.draw_text_ex(font, char, position, font_size, spacing, tint)
+
+        text_offset_x += glyph_width
 
 def main():
     # Initialization

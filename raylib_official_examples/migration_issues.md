@@ -113,10 +113,9 @@ shapes/:
 
 text/:
 - raylib_official_examples/text/text_draw_3d.py
-  => no text is drawn
+  => hello world only show from the back, and no 3D plan text is drawn
 - raylib_official_examples/text/text_raylib_fonts.py: all fonts displayed the bottom instead of behind vertical aligned.
-- [text_rectangle_bounds.py](text/text_rectangle_bounds.py):
-  rl.draw_text_rec(font, text, rec, font_size, spacing, word_wrap, tint)
-  AttributeError: module 'pyray' has no attribute 'draw_text_rec'
+- text/text_rectangle_bounds.py: all characters inside the rectangle are drawn overlap. Somehow font glyphs all have
+  a glyph.advanceX of 0...
 - raylib_official_examples/text/text_unicode.py:
   emoji don't show, just some questionmarks in the background. 
