@@ -15,14 +15,12 @@ from pathlib import Path
 THIS_DIR = Path(__file__).resolve().parent
 
 # Define GLSL versions based on platform
-if rl.is_window_fullscreen():  # Using this as a simple check for desktop
-    GLSL_VERSION = 330
-else:  # Android or Web
-    GLSL_VERSION = 100
+GLSL_VERSION = 330
+# GLSL_VERSION = 100 #set to 100 for Android, Web.
 
 # Generate cubemap (6 faces) from equirectangular (panorama) texture
 def gen_texture_cubemap(shader, panorama, size, format_):
-    cubemap = rl.TextureCubemap()
+    cubemap = rl.Texture() # rl.TextureCubemap()
 
     rl.rl_disable_backface_culling()  # Disable backface culling to render inside the cube
 
@@ -126,39 +124,39 @@ if __name__ == "__main__":
     # Load skybox shader and set required locations
     # NOTE: Some locations are automatically set at shader loading
     skybox.materials[0].shader = rl.load_shader(
-        "", 
+        str(THIS_DIR/f"resources/shaders/glsl{GLSL_VERSION}/skybox.vs"),
         str(THIS_DIR/f"resources/shaders/glsl{GLSL_VERSION}/skybox.fs")
     )
 
     rl.set_shader_value(
         skybox.materials[0].shader, 
         rl.get_shader_location(skybox.materials[0].shader, "environmentMap"), 
-        rl.MATERIAL_MAP_CUBEMAP, 
+        rl.ffi.new("int*", rl.MATERIAL_MAP_CUBEMAP), 
         rl.SHADER_UNIFORM_INT
     )
     rl.set_shader_value(
         skybox.materials[0].shader,
         rl.get_shader_location(skybox.materials[0].shader, "doGamma"),
-        1 if use_hdr else 0,
+        rl.ffi.new("int*", 1 if use_hdr else 0),
         rl.SHADER_UNIFORM_INT
     )
     rl.set_shader_value(
         skybox.materials[0].shader,
         rl.get_shader_location(skybox.materials[0].shader, "vflipped"),
-        1 if use_hdr else 0,
+        rl.ffi.new("int*", 1 if use_hdr else 0),
         rl.SHADER_UNIFORM_INT
     )
 
     # Load cubemap shader and setup required shader locations
     shdr_cubemap = rl.load_shader(
-        "",
+        str(THIS_DIR/f"resources/shaders/glsl{GLSL_VERSION}/cubemap.vs"),
         str(THIS_DIR/f"resources/shaders/glsl{GLSL_VERSION}/cubemap.fs")
     )
 
     rl.set_shader_value(
         shdr_cubemap,
         rl.get_shader_location(shdr_cubemap, "equirectangularMap"),
-        0,
+        rl.ffi.new("int*", 0),
         rl.SHADER_UNIFORM_INT
     )
 
