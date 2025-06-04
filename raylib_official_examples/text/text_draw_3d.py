@@ -51,22 +51,87 @@ class WaveTextConfig:
 # Module Functions Declaration
 #--------------------------------------------------------------------------------------
 # Draw a codepoint in 3D space
+# Update draw_text_codepoint_3d to render both front and back faces
 def draw_text_codepoint_3d(font, codepoint, position, font_size, backface, tint):
-    # Implementation would go here - complex drawing function
-    # This is a placeholder as the function is extensive in the C version
-    pass
+    # Get the glyph index for the codepoint
+    index = rl.get_glyph_index(font, codepoint)
+    scale = font_size / font.baseSize
+
+    # Calculate the source rectangle for the glyph
+    src_rec = rl.Rectangle(
+        font.recs[index].x,
+        font.recs[index].y,
+        font.recs[index].width,
+        font.recs[index].height
+    )
+
+    # Calculate the destination rectangle in 3D space
+    dest_rec = rl.Rectangle(
+        position.x + (font.glyphs[index].offsetX * scale),
+        position.y + (font.glyphs[index].offsetY * scale),
+        font.recs[index].width * scale,
+        font.recs[index].height * scale
+    )
+
+    # Draw the glyph texture for both front and back faces
+    rl.draw_texture_pro(
+        font.texture,
+        src_rec,
+        dest_rec,
+        rl.Vector2(0, 0),  # No rotation offset
+        0.0,               # No rotation
+        tint
+    )
+
+    if backface:
+        # Flip the texture for the back face
+        flipped_src_rec = rl.Rectangle(
+            src_rec.x + src_rec.width,
+            src_rec.y,
+            -src_rec.width,
+            src_rec.height
+        )
+        rl.draw_texture_pro(
+            font.texture,
+            flipped_src_rec,
+            dest_rec,
+            rl.Vector2(0, 0),  # No rotation offset
+            0.0,               # No rotation
+            tint
+        )
 
 # Draw a 2D text in 3D space
 def draw_text_3d(font, text, position, font_size, font_spacing, line_spacing, backface, tint):
-    # Implementation would go here - complex drawing function
-    # This is a placeholder as the function is extensive in the C version
-    pass
+    offset = rl.Vector3(position.x, position.y, position.z)
+    for char in text:
+        if char == '\n':
+            offset.x = position.x
+            offset.z += font_size + line_spacing
+            continue
+        draw_text_codepoint_3d(font, ord(char), offset, font_size, backface, tint)
+        offset.x += font_size + font_spacing
 
 # Draw a 2D text in 3D space and wave the parts that start with `~~` and end with `~~`.
 def draw_text_wave_3d(font, text, position, font_size, font_spacing, line_spacing, backface, config, time, tint):
-    # Implementation would go here - complex drawing function
-    # This is a placeholder as the function is extensive in the C version
-    pass
+    offset = rl.Vector3(position.x, position.y, position.z)
+    wave_active = False
+    for char in text:
+        if char == '\n':
+            offset.x = position.x
+            offset.z += font_size + line_spacing
+            continue
+        if char == '~':
+            wave_active = not wave_active
+            continue
+
+        wave_offset = rl.Vector3(0, 0, 0)
+        if wave_active:
+            wave_offset.x = math.sin(time * config.wave_speed.x + offset.x * config.wave_offset.x) * config.wave_range.x
+            wave_offset.y = math.sin(time * config.wave_speed.y + offset.y * config.wave_offset.y) * config.wave_range.y
+            wave_offset.z = math.sin(time * config.wave_speed.z + offset.z * config.wave_offset.z) * config.wave_range.z
+
+        draw_text_codepoint_3d(font, ord(char), rl.Vector3(offset.x + wave_offset.x, offset.y + wave_offset.y, offset.z + wave_offset.z), font_size, backface, tint)
+        offset.x += font_size + font_spacing
 
 # Measure a text in 3D ignoring the `~~` chars.
 def measure_text_wave_3d(font, text, font_size, font_spacing, line_spacing):
@@ -136,7 +201,10 @@ def main():
     dark = rl.RED
 
     # Load the alpha discard shader
-    alpha_discard = rl.load_shader("", str(THIS_DIR/"resources/shaders/glsl330/alpha_discard.fs"))
+    alpha_discard = rl.load_shader(
+        "",  # Use default vertex shader as in the C example
+        str(THIS_DIR/"resources/shaders/glsl330/alpha_discard.fs")
+    )
 
     # Array filled with multiple random colors (when multicolor mode is set)
     multi = [rl.Color(0, 0, 0, 0) for _ in range(TEXT_MAX_LAYERS)]
@@ -189,7 +257,7 @@ def main():
 
         # Handle clicking the cube
         if rl.is_mouse_button_pressed(rl.MOUSE_BUTTON_LEFT):
-            ray = rl.get_mouse_ray(rl.get_mouse_position(), camera)
+            ray = rl.get_screen_to_world_ray(rl.get_mouse_position(), camera)
 
             # Check collision between ray and box
             box_min = rl.Vector3(cube_position.x - cube_size.x/2, cube_position.y - cube_size.y/2, cube_position.z - cube_size.z/2)
@@ -248,23 +316,32 @@ def main():
         # Draw a cube as reference
         rl.draw_cube(cube_position, cube_size.x, cube_size.y, cube_size.z, light)
         rl.draw_cube_wires(cube_position, cube_size.x, cube_size.y, cube_size.z, dark)
-        
-        # Note: Here would go the complex 3D text rendering which is omitted
-        # draw_text_wave_3d(font, text, position, font_size, font_spacing, line_spacing, True, wcfg, time, tint)
+        rl.draw_grid(10, 2.0)
+
+        # Use the alpha discard shader for 3D text (as in C example)
+        rl.begin_shader_mode(alpha_discard)
+        # Draw the waving 3D text above the cube (approximate position)
+        draw_text_wave_3d(font, text, rl.Vector3(0, 2.5, 0), font_size, font_spacing, line_spacing, True, wcfg, time, rl.DARKBLUE)
+        rl.end_shader_mode()
         
         rl.end_mode_3d()
 
-        # Draw info boxes
-        rl.draw_rectangle(0, 0, screen_width, 40, rl.BLACK)
-        rl.draw_text("PRESS F1 to toggle LETTER_BOUNDRY, F2 for TEXT_BOUNDRY, F3 for CAMERA MODE", 10, 10, 20, rl.GREEN)
+        # Draw background text on a 3D plane
+        rl.begin_shader_mode(alpha_discard)
+        draw_text_3d(font, "Background Text", rl.Vector3(-5, 0.1, 5), font_size * 0.5, font_spacing * 0.5, line_spacing * 0.5, True, rl.GRAY)
+        rl.end_shader_mode()
 
-        rl.draw_rectangle(0, screen_height - 100, 320, 100, rl.BLACK)
-        rl.draw_text(f"Text Size [L/R]: {font_size:.2f}", 10, screen_height - 90, 10, rl.GREEN)
-        rl.draw_text(f"Font Spacing [U/D]: {font_spacing:.2f}", 10, screen_height - 75, 10, rl.GREEN)
-        rl.draw_text(f"Line Spacing [PGUP/PGDN]: {line_spacing:.2f}", 10, screen_height - 60, 10, rl.GREEN)
-        rl.draw_text(f"Layers [HOME/END]: {layers}", 10, screen_height - 45, 10, rl.GREEN)
-        rl.draw_text(f"Layer Distance [INS/DEL]: {layer_distance:.2f}", 10, screen_height - 30, 10, rl.GREEN)
-        rl.draw_text("TAB to change layer colors", 10, screen_height - 15, 10, rl.GREEN)
+        # Draw info boxes (adjusted for C example style)
+        rl.draw_rectangle(0, 0, screen_width, 80, rl.fade(rl.BLACK, 0.7))
+        rl.draw_text("Drag & drop a font file to change the font!", 10, 10, 20, rl.GREEN)
+        rl.draw_text("Press [F3] to toggle the camera", 10, 35, 20, rl.GREEN)
+        rl.draw_text(f"Text Size [L/R]: {font_size:.2f}", 10, 60, 18, rl.GREEN)
+        rl.draw_text(f"Font Spacing [U/D]: {font_spacing:.2f}", 250, 60, 18, rl.GREEN)
+        rl.draw_text(f"Line Spacing [PGUP/PGDN]: {line_spacing:.2f}", 500, 60, 18, rl.GREEN)
+        rl.draw_text(f"Layers [HOME/END]: {layers}", 10, 80, 18, rl.GREEN)
+        rl.draw_text(f"Layer Distance [INS/DEL]: {layer_distance:.2f}", 250, 80, 18, rl.GREEN)
+        rl.draw_text("TAB to change layer colors", 500, 80, 18, rl.GREEN)
+        rl.draw_fps(10, screen_height - 30)
         
         rl.end_drawing()
 
