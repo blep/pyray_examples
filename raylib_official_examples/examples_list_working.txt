@@ -132,6 +132,7 @@ textures/textures_polygon.py
 textures/textures_raw_data.py
 textures/textures_sprite_anim.py
 textures/textures_sprite_button.py
+textures/textures_sprite_explosion.py
 textures/textures_srcrec_dstrec.py
 textures/textures_textured_curve.py
 textures/textures_to_image.py

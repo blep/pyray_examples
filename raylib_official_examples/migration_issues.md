@@ -126,6 +126,3 @@ text/:
   AttributeError: module 'pyray' has no attribute 'draw_text_rec'
 - raylib_official_examples/text/text_unicode.py:
   emoji don't show, just some questionmarks in the background. 
-
-textures/:
-- raylib_official_examples/textures/textures_sprite_explosion.py: nothing displayed, no audio

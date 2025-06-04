@@ -31,18 +31,19 @@ fxBoom = rl.load_sound(str(THIS_DIR/"resources/boom.wav"))
 explosion = rl.load_texture(str(THIS_DIR/"resources/explosion.png"))
 
 # Init variables for animation
-frameWidth = explosion.width / NUM_FRAMES_PER_LINE  # Sprite one frame rectangle width
-frameHeight = explosion.height / NUM_LINES          # Sprite one frame rectangle height
+frameWidth = float(explosion.width // NUM_FRAMES_PER_LINE)  # Sprite one frame rectangle width
+frameHeight = float(explosion.height // NUM_LINES)          # Sprite one frame rectangle height
 currentFrame = 0
 currentLine = 0
 
-frameRec = rl.Rectangle(0, 0, frameWidth, frameHeight)
+frameRec = rl.Rectangle(0.0, 0.0, frameWidth, frameHeight)  # Ensure x, y are also float for consistency
 position = rl.Vector2(0.0, 0.0)
 
 active = False
 framesCounter = 0
 
 rl.set_target_fps(60)  # Set our game to run at 60 frames-per-second
+print('Click on the screen to generate an explosion')
 
 # Main game loop
 while not rl.window_should_close():  # Detect window close button or ESC key
