@@ -53,6 +53,7 @@ models/models_heightmap.py
 models/models_loading.py
 models/models_loading_gltf.py
 models/models_loading_m3d.py
+models/models_loading_vox.py
 models/models_mesh_picking.py
 models/models_orthographic_projection.py
 models/models_rlgl_solar_system.py

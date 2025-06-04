@@ -15,7 +15,6 @@ gui/gui_value_box_float.py
 gui/image_importer_raw.py
 gui/property_list.py
 gui/style_selector.py
-models/models_loading_vox.py
 models/models_mesh_generation.py
 models/models_point_rendering.py
 models/models_skybox.py

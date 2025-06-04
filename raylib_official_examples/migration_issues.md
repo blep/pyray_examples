@@ -63,9 +63,6 @@ models/:
     )
   TypeError: Argument 2 (7) must be a cdata pointer. Type is void so I don't know what type it should be.If it's a const string you can create it with pyray.ffi.new('char []', b"whatever") . If it's a float you can create it with pyray.ffi.new('float *', 1.0)
   => most common use cas is passing constant, IMHO, binding should allow it
-- raylib_official_examples/models/models_loading_vox.py:
-  rl.set_shader_value(shader, ambient_loc, [0.1, 0.1, 0.1, 1.0], rl.SHADER_UNIFORM_VEC4)
-  TypeError: Argument 2 ([0.1, 0.1, 0.1, 1.0]) must be a cdata pointer. Type is void so I don't know what type it should be.If it's a const string you can create it with pyray.ffi.new('char []', b"whatever") . If it's a float you can create it with pyray.ffi.new('float *', 1.0)
 - raylib_official_examples/models/models_mesh_generation.py:
   mesh.vertices = vertices
   TypeError: initializer for ctype 'float *' must be a cdata pointer, not list

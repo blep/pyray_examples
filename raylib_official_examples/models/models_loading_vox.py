@@ -21,10 +21,8 @@ MAX_VOX_FILES = 4
 MAX_LIGHTS = 4
 
 # Define platform for shader version
-if rl.is_window_state(rl.FLAG_WINDOW_HIGHDPI):  # Desktop platform
-    GLSL_VERSION = 330
-else:  # Android, Web
-    GLSL_VERSION = 100
+GLSL_VERSION = 330
+# GLSL_VERSION = 100 # No shaders available for GLSL_VERSION 1.0; original code decide based on PLATFORM_DESKTOP
 
 # Light type enumeration
 LIGHT_DIRECTIONAL = 0
@@ -69,20 +67,19 @@ def create_light(type, position, target, color, shader):
 # Function to update light values
 def update_light_values(shader, light):
     # Send to shader light enabled state and type
-    rl.set_shader_value(shader, light.enabled_loc, light.enabled, rl.SHADER_UNIFORM_INT)
-    rl.set_shader_value(shader, light.type_loc, light.type, rl.SHADER_UNIFORM_INT)
+    rl.set_shader_value(shader, light.enabled_loc, rl.ffi.new("int*", int(light.enabled)), rl.SHADER_UNIFORM_INT)
+    rl.set_shader_value(shader, light.type_loc, rl.ffi.new("int*", light.type), rl.SHADER_UNIFORM_INT)
     
     # Send to shader light position values
-    position = [light.position.x, light.position.y, light.position.z]
-    rl.set_shader_value(shader, light.position_loc, position, rl.SHADER_UNIFORM_VEC3)
+    rl.set_shader_value(shader, light.position_loc, rl.ffi.addressof(light.position), rl.SHADER_UNIFORM_VEC3)
     
     # Send to shader light target position values
-    target = [light.target.x, light.target.y, light.target.z]
-    rl.set_shader_value(shader, light.target_loc, target, rl.SHADER_UNIFORM_VEC3)
+    rl.set_shader_value(shader, light.target_loc, rl.ffi.addressof(light.target), rl.SHADER_UNIFORM_VEC3)
     
     # Send to shader light color values
-    color = [light.color.r/255.0, light.color.g/255.0, light.color.b/255.0, light.color.a/255.0]
-    rl.set_shader_value(shader, light.color_loc, color, rl.SHADER_UNIFORM_VEC4)
+    # Assuming light.color is a tuple (r, g, b, a)
+    normalized_color = [light.color[0]/255.0, light.color[1]/255.0, light.color[2]/255.0, light.color[3]/255.0]
+    rl.set_shader_value(shader, light.color_loc, rl.ffi.new("float[]", normalized_color), rl.SHADER_UNIFORM_VEC4)
 
 #------------------------------------------------------------------------------------
 # Program main entry point
@@ -147,7 +144,7 @@ if __name__ == "__main__":
 
     # Ambient light level (some basic lighting)
     ambient_loc = rl.get_shader_location(shader, "ambient")
-    rl.set_shader_value(shader, ambient_loc, [0.1, 0.1, 0.1, 1.0], rl.SHADER_UNIFORM_VEC4)
+    rl.set_shader_value(shader, ambient_loc, rl.ffi.new("float[]", [0.1, 0.1, 0.1, 1.0]), rl.SHADER_UNIFORM_VEC4)
 
     # Assign our lighting shader to model
     for i in range(MAX_VOX_FILES):
@@ -204,8 +201,7 @@ if __name__ == "__main__":
             current_model = (current_model + 1) % MAX_VOX_FILES
 
         # Update the shader with the camera view vector (points towards { 0.0f, 0.0f, 0.0f })
-        camera_pos = [camera.position.x, camera.position.y, camera.position.z]
-        rl.set_shader_value(shader, shader.locs[rl.SHADER_LOC_VECTOR_VIEW], camera_pos, rl.SHADER_UNIFORM_VEC3)
+        rl.set_shader_value(shader, shader.locs[rl.SHADER_LOC_VECTOR_VIEW], rl.ffi.addressof(camera.position), rl.SHADER_UNIFORM_VEC3)
 
         # Update light values (actually, only enable/disable them)
         for i in range(MAX_LIGHTS):
