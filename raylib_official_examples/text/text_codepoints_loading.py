@@ -56,7 +56,8 @@ def main():
 
     # Load font containing all the provided codepoint glyphs
     # A texture font atlas is automatically generated
-    font = rl.load_font_ex(str(THIS_DIR/"resources/DotGothic16-Regular.ttf"), 36, codepoints_array, codepoints_no_dups_count)
+    font = rl.load_font_ex(str(THIS_DIR/"resources/DotGothic16-Regular.ttf"), 36,
+                           rl.ffi.cast("int *", codepoints_array), codepoints_no_dups_count)
 
     # Set bilinear scale filter for better font scaling
     rl.set_texture_filter(font.texture, rl.TEXTURE_FILTER_BILINEAR)

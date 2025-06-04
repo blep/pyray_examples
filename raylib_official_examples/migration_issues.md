@@ -117,9 +117,6 @@ shapes/:
 text/:
 - raylib_official_examples/text/text_draw_3d.py
   => no text is drawn
-- raylib_official_examples/text/text_codepoints_loading.py:
-  font = rl.load_font_ex(str(THIS_DIR/"resources/DotGothic16-Regular.ttf"), 36, codepoints_array, codepoints_no_dups_count)
-  TypeError: initializer for ctype 'int *' must be a pointer to same type, not cdata 'int(*)[]'
 - raylib_official_examples/text/text_raylib_fonts.py: all fonts displayed the bottom instead of behind vertical aligned.
 - [text_rectangle_bounds.py](text/text_rectangle_bounds.py):
   rl.draw_text_rec(font, text, rec, font_size, spacing, word_wrap, tint)

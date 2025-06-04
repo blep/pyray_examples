@@ -102,6 +102,7 @@ shapes/shapes_logo_raylib.py
 shapes/shapes_logo_raylib_anim.py
 shapes/shapes_rectangle_scaling.py
 shapes/shapes_splines_drawing.py
+text/text_codepoints_loading.py
 text/text_font_filters.py
 text/text_font_loading.py
 text/text_font_sdf.py

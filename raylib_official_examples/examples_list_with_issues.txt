@@ -29,7 +29,6 @@ shapes/shapes_easings_box_anim.py
 shapes/shapes_easings_rectangle_array.py
 shapes/shapes_rectangle_advanced.py
 shapes/shapes_top_down_lights.py
-text/text_codepoints_loading.py
 text/text_draw_3d.py
 text/text_raylib_fonts.py
 text/text_unicode.py
