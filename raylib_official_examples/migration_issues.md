@@ -128,9 +128,4 @@ text/:
   emoji don't show, just some questionmarks in the background. 
 
 textures/:
-- raylib_official_examples/textures/textures_image_kernel.py:
-  sharpen_kernel = normalize_kernel(sharpen_kernel, 9)
-  # ...
-  rl.image_kernel_convolution(cat_sharpened, sharpen_kernel, 9)
-  TypeError: Argument 1 ([0.0, -1.0, 0.0, -1.0, 5.0, -1.0, 0.0, -1.0, 0.0]) must be a ctype float, please create one with: pyray.ffi.new('float *', 1.0)
 - raylib_official_examples/textures/textures_sprite_explosion.py: nothing displayed, no audio

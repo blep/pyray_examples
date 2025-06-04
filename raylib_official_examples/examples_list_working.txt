@@ -119,6 +119,7 @@ textures/textures_gif_player.py
 textures/textures_image_channel.py
 textures/textures_image_drawing.py
 textures/textures_image_generation.py
+textures/textures_image_kernel.py
 textures/textures_image_loading.py
 textures/textures_image_processing.py
 textures/textures_image_rotate.py

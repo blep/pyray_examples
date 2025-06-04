@@ -34,23 +34,23 @@ rl.init_window(screenWidth, screenHeight, "raylib [textures] example - image con
 image = rl.load_image(str(THIS_DIR/"resources/cat.png"))  # Loaded in CPU memory (RAM)
 
 # Define kernels for different effects
-gaussian_kernel = [
+gaussian_kernel = rl.ffi.new("float[]", [
     1.0, 2.0, 1.0,
     2.0, 4.0, 2.0,
     1.0, 2.0, 1.0
-]
+])
 
-sobel_kernel = [
+sobel_kernel = rl.ffi.new("float[]", [
     1.0, 0.0, -1.0,
     2.0, 0.0, -2.0,
     1.0, 0.0, -1.0
-]
+])
 
-sharpen_kernel = [
+sharpen_kernel = rl.ffi.new("float[]", [
     0.0, -1.0, 0.0,
     -1.0, 5.0, -1.0,
     0.0, -1.0, 0.0
-]
+])
 
 # Normalize kernels
 gaussian_kernel = normalize_kernel(gaussian_kernel, 9)
@@ -59,14 +59,14 @@ sobel_kernel = normalize_kernel(sobel_kernel, 9)
 
 # Apply kernels to create different image effects
 cat_sharpened = rl.image_copy(image)
-rl.image_kernel_convolution(cat_sharpened, sharpen_kernel, 9)
+rl.image_kernel_convolution(cat_sharpened, rl.ffi.cast("float *", sharpen_kernel), 9)
 
 cat_sobel = rl.image_copy(image)
-rl.image_kernel_convolution(cat_sobel, sobel_kernel, 9)
+rl.image_kernel_convolution(cat_sobel, rl.ffi.cast("float *", sobel_kernel), 9)
 
 cat_gaussian = rl.image_copy(image)
 for i in range(6):
-    rl.image_kernel_convolution(cat_gaussian, gaussian_kernel, 9)
+    rl.image_kernel_convolution(cat_gaussian, rl.ffi.cast("float *", gaussian_kernel), 9)
 
 # Crop images to show side by side
 rl.image_crop(image, rl.Rectangle(0, 0, 200, 450))

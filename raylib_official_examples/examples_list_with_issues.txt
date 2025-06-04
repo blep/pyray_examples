@@ -33,5 +33,4 @@ text/text_codepoints_loading.py
 text/text_draw_3d.py
 text/text_raylib_fonts.py
 text/text_unicode.py
-textures/textures_image_kernel.py
 textures/textures_sprite_explosion.py
