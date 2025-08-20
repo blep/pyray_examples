@@ -36,7 +36,7 @@ def main():
     pixel_format_text_list = ["GRAYSCALE", "GRAY ALPHA", "R5G6B5", "R8G8B8", "R5G5B5A1", "R4G4B4A4", "R8G8B8A8"]
 
     text_box_edit_mode = False
-    file_name = "untitled"
+    file_name = rl.ffi.new("char[64]", b"untitled")
     #--------------------------------------------------------------------------------------
     
     image = rl.Image()
@@ -85,24 +85,30 @@ def main():
         if btn_export_pressed:
             if image_loaded:
                 rl.image_format(image, pixel_format_active_ptr[0] + 1)
-                
+
+                # Convert file_name to a Python string for manipulation
+                file_name_str = rl.ffi.string(file_name).decode('utf-8')
+
                 if file_format_active_ptr[0] == 0:        # PNG
-                    if (rl.get_file_extension(file_name) is None) or (not rl.is_file_extension(file_name, ".png")):
-                        file_name += ".png"
-                    rl.export_image(image, file_name)
+                    if (rl.get_file_extension(file_name_str) is None) or (not rl.is_file_extension(file_name_str, ".png")):
+                        file_name_str += ".png"
+                    rl.export_image(image, file_name_str)
                 elif file_format_active_ptr[0] == 1:   # RAW
-                    if (rl.get_file_extension(file_name) is None) or (not rl.is_file_extension(file_name, ".raw")):
-                        file_name += ".raw"
-                    
+                    if (rl.get_file_extension(file_name_str) is None) or (not rl.is_file_extension(file_name_str, ".raw")):
+                        file_name_str += ".raw"
+
                     data_size = rl.get_pixel_data_size(image.width, image.height, image.format)
-                    
+
                     # In Python, we need to use a different approach to write binary data
                     raw_data = rl.ffi.buffer(image.data, data_size)
-                    with open(file_name, "wb") as raw_file:
+                    with open(file_name_str, "wb") as raw_file:
                         raw_file.write(raw_data)
                 elif file_format_active_ptr[0] == 2:   # CODE
-                    rl.export_image_as_code(image, file_name)
-            
+                    rl.export_image_as_code(image, file_name_str)
+
+                # Update the C-style buffer with the modified file name
+                file_name = rl.ffi.new("char[64]", file_name_str.encode('utf-8'))
+
             window_box_active = False
         
         if image_loaded:

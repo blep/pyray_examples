@@ -55,7 +55,7 @@ def main():
     value_box002_value_ptr = rl.ffi.new('int *', 0)
     value_box_edit_mode = False
 
-    text_box_text = "Text box"
+    text_box_text = rl.ffi.new("char[64]", b"Text box")
     text_box_edit_mode = False
 
     text_box_multi_text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nThisisastringlongerthanexpectedwithoutspacestotestcharbreaksforthosecases,checkingifworkingasexpected.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
@@ -212,7 +212,11 @@ def main():
             value_box_edit_mode = not value_box_edit_mode
         
         rl.gui_set_style(rl.TEXTBOX, rl.TEXT_ALIGNMENT, rl.TEXT_ALIGN_LEFT)
-        text_box_result = rl.gui_text_box(rl.Rectangle(25, 215, 125, 30), text_box_text, 64, text_box_edit_mode)
+        old_text_box_text_str = rl.ffi.string(text_box_text).decode('utf-8')
+        text_box_result = rl.gui_text_box(rl.Rectangle(25, 215, 125, 30), text_box_text, len(text_box_text), text_box_edit_mode)
+        text_box_text_str = rl.ffi.string(text_box_text).decode('utf-8')
+        if old_text_box_text_str != text_box_text_str:
+            print('TextBox text:', text_box_text_str)
         if text_box_result:
             text_box_edit_mode = not text_box_edit_mode
 
